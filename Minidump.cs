@@ -9,7 +9,7 @@ namespace Hillinworks
     {
         public static void Create(string path = null, DumpLevel level = DumpLevel.Minimal)
         {
-            var executable = typeof(Minidump).Assembly.GetName().Name + ".exe";
+            var executable = typeof(Minidump).Assembly.Location;
             var arguments = $"\"{path}\" --level {level}";
             var process = Process.Start(executable, arguments);
             Debug.Assert(process != null, nameof(process) + " != null");
