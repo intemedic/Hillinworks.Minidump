@@ -9,11 +9,22 @@ namespace Hillinworks
     {
         public static void Create(string path = null, DumpLevel level = DumpLevel.Minimal)
         {
-            var executable = typeof(Minidump).Assembly.Location;
-            var arguments = $"\"{path}\" --level {level}";
-            var process = Process.Start(executable, arguments);
-            Debug.Assert(process != null, nameof(process) + " != null");
-            process.WaitForExit();
+            try
+            {
+                var executable = typeof(Minidump).Assembly.Location;
+                var arguments = $"\"{path}\" --level {level}";
+                var startInfo = new ProcessStartInfo(executable, arguments)
+                {
+                    UseShellExecute = false
+                };
+                var process = Process.Start(startInfo);
+                Debug.Assert(process != null, nameof(process) + " != null");
+                process.WaitForExit();
+            }
+            catch (Exception)
+            {
+                // we do not want a recursive minidump here, ignore this exception
+            }
         }
 
         private static void Main(string[] args)
